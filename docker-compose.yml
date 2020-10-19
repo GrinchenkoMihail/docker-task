@@ -1,0 +1,38 @@
+version: '3.1'
+
+services:
+  mongo:
+    image: mongo
+    restart: on-failure
+    ports:
+      - "27017:27017"
+    env_file:
+      - .env
+
+  mongo-express:
+    image: mongo-express
+    restart: on-failure
+    depends_on:
+      - mongo
+    ports:
+      - "8081:8081"
+
+
+  admin:
+    image: greenmel/admin-server
+    restart: on-failure
+    ports:
+      - "9003:9003"
+
+  client:
+    image: greenmel/client-service
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    depends_on:
+      - admin
+      - mongo
+
+    env_file:
+      - .env
+
